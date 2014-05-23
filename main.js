@@ -1,51 +1,70 @@
 
-function desugar_with(source) {
 
+function throwParseError(expected, expr) {
+    console.log("Parse error: Expected " + expected + " found " + expr);
+    throw new Error();
 }
 
-function interpret(source) {
-    /* if (_is string?!?!) {
-        // if (is number) else
-        switch
-        case "true"
-        case "false"
+function requireType(value, type) {
+    if (typeof value != type)
+        throwParseError(type, value);
+    return value;
+}
 
-        default
-            // this is an id or unbound
-    }*/
-    switch (source[0]) {
-    case "with":
-        code = desugar_with(source);
-        console.log("I'm a with!");
-        var a = interpret(source[1]);
-        var b = interpret(source[2]);
-        console.log("a and b are: " + a + ", " + b);
+function interpret(expr) {
+    switch (expr['name']) {
+
+    case 'num':
+        return parseFloat(expr['n']);
+
+    case 'bool':
+        switch (expr['b']) {
+        case 'true':
+            return true;
+        case 'false':
+            return false;
+        default:
+            throwParseError('bool.b', expr);
+        }
+
+    case 'with':
         break;
-    case "fn":
+
+    case 'fn':
         break;
-    case "+":
+
+    case'+':
+        return requireType(interpret(expr['l']), "number") + requireType(interpret(expr['r']), "number");
         break;
-    case "-":
+
+    case'-':
+        return requireType(interpret(expr['l']), "number") - requireType(interpret(expr['r']), "number");
         break;
-    case "*":
+
+    case'*':
+        return requireType(interpret(expr['l']), "number") * requireType(interpret(expr['r']), "number");
         break;
-    case "/":
+
+    case'/':
+        return requireType(interpret(expr['l']), "number") / requireType(interpret(expr['r']), "number");
         break;
-    case "eq?":
+
+    case 'eq?':
         break;
-    case "if":
+
+    case 'if':
         break;
-    case "fn":
+
+    case 'fn':
         break;
+
     default:
         console.log("Confused.");
-        break;
+
     }
 
     return 0;
 }
 
-
-var source = ['with', ['z','=',14], ['+', 'z', 'z']];
-
-interpret(source);
+console.log(interpret({name: 'num', n: '657'}));
+console.log(interpret({name: '+', l: {name: 'num', n: '123'}, r: {name: 'num', n: '456'}}));
