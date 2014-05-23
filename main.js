@@ -34,22 +34,25 @@ function interpret(expr, env) {
 
     case'+':
         return requireType(interpret(expr['l']), "number") + requireType(interpret(expr['r']), "number");
-        break;
 
     case'-':
         return requireType(interpret(expr['l']), "number") - requireType(interpret(expr['r']), "number");
-        break;
 
     case'*':
         return requireType(interpret(expr['l']), "number") * requireType(interpret(expr['r']), "number");
-        break;
 
     case'/':
         return requireType(interpret(expr['l']), "number") / requireType(interpret(expr['r']), "number");
-        break;
 
     case 'eq?':
-        break;
+
+        left = interpret(expr['l']);
+        right = interpret(expr['r']);
+
+        if (typeof left == typeof right)
+            return left == right;
+        else
+            return false;
 
     case 'if':
 
@@ -65,7 +68,6 @@ function interpret(expr, env) {
     case 'id':
 
         return env[expr['s']];
-        break;
 
     default:
         console.log("Confused.");
