@@ -74,8 +74,10 @@ function interpret(expr, env) {
     return 0;
 }
 
-console.log(interpret({name: 'num', n: '657'}));
-console.log(interpret({name: '+', left: {name: 'num', n: '123'}, right: {name: 'num', n: '456'}}));
-console.log(interpret({name: 'id', id: 'x'}, {x: 3}));
-console.log(interpret({name: 'app', lam: {name: 'lam', params: [], body: {name: 'num', n: '111'}}, args: []}));
-console.log(interpret({name: 'app', lam: {name: 'lam', params: ['x'], body: {name: 'id', id: 'x'}}, args: [{name: 'num', n: '3'}]}));
+test( "basic interpret test", function() {
+    ok(657 === interpret({name: 'num', n: '657'}));
+    ok(579 === interpret({name: '+', left: {name: 'num', n: '123'}, right: {name: 'num', n: '456'}}));
+    ok(3   === interpret({name: 'id', id: 'x'}, {x: 3}));
+    ok(111 === interpret({name: 'app', lam: {name: 'lam', params: [], body: {name: 'num', n: '111'}}, args: []}));
+    ok(3   === interpret({name: 'app', lam: {name: 'lam', params: ['x'], body: {name: 'id', id: 'x'}}, args: [{name: 'num', n: '3'}]}));
+});
