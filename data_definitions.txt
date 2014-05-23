@@ -8,7 +8,7 @@ JSZOR ::= NUMBER
        | {with {ID = JSZOR} ... JSOR}
        | {fn {ID ...} JSZOR}
        | {operator JSZOR JSZOR}
-       | {BOZOR3 JSZOR ...}
+       | {BOZOR3 JSZOR, ...}
 
 operator ::= +
          | -
