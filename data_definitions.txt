@@ -45,32 +45,8 @@ expr["then"] = expr
 expr["else"] = expr
 
 ::binop
-expr["name"] = "+"
-expr["left"] = expr !-> num
-expr["right"] = expr !-> num
-
-::binop
-expr["name"] = "-"
-expr["left"] = expr !-> num
-expr["right"] = expr !-> num
-
-::binop
-expr["name"] = "*"
-expr["left"] = expr !-> num
-expr["right"] = expr !-> num
-
-::binop
-expr["name"] = "/"
-expr["left"] = expr !-> num
-expr["right"] = expr !-> num
-
-::binop
-expr["name"] = "eq?"
-expr["left"] = expr !-> num
-expr["right"] = expr !-> num
-
-::binop
-expr["name"] = "<="
+expr["name"] = "binop"
+expr["op"] = operator
 expr["left"] = expr !-> num
 expr["right"] = expr !-> num
 
