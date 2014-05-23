@@ -6,7 +6,7 @@ JSZOR ::= NUMBER
        | ID
        | ["if", JSZOR, JSZOR, JSZOR]
        | ["with", [[ID, "=", JSZOR], ...], JSOR]
-       | ["fn". [ID, ...], JSZOR]
+       | ["fn", [ID, ...], JSZOR]
        | ["operator", JSZOR, JSZOR]
        | [JSZOR, JSZOR, ...]
 
@@ -53,4 +53,4 @@ expr["right"] = expr !-> num
 ::app
 expr["name"] = "app"
 expr["lam"] = expr !-> lam
-expr["args"] = [id]
+expr["args"] = [expr]
