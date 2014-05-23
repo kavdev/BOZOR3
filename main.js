@@ -1,6 +1,6 @@
 
 function throwParseError(expected, expr) {
-    console.log("Parse error: Expected " + expected + " found " + expr);
+    console.log("Parse error: Expected " + expected + " found " + expr + " (" + typeof expr + ")");
     throw new Error();
 }
 
@@ -27,9 +27,6 @@ function interpret(expr, env) {
         }
 
     case 'with':
-        break;
-
-    case 'fn':
         break;
 
     case'+':
@@ -63,13 +60,25 @@ function interpret(expr, env) {
         break;
 
     case 'fn':
-        break;
+        console.log("Returning a fn");
+        return {args: expr['args'], body: expr['body'], env: env};
+
+    case 'app':
+        if (env == null)
+            env = {};
+
+        var closure = requireType(interpret(expr['fn']), "object");
+        if (closure['args'].length != expr['args'].length)
+            throw 'Mismatched argument lengths';
+        for (var i = 0; i < closure['args'].length; ++ i)
+            env[closure['args'][i]] = interpret(expr['args'][i]);
+        return interpret(closure['body'], env);
 
     case 'id':
         return env[expr['s']];
 
     default:
-        console.log("Confused.");
+        console.log("Confused? " + expr['name']);
 
     }
 
@@ -79,3 +88,5 @@ function interpret(expr, env) {
 console.log(interpret({name: 'num', n: '657'}));
 console.log(interpret({name: '+', l: {name: 'num', n: '123'}, r: {name: 'num', n: '456'}}));
 console.log(interpret({name: 'id', s: 'x'}, {x: 3}));
+console.log(interpret({name: 'app', fn: {name: 'fn', args: [], body: {name: 'num', n: '111'}}, args: []}));
+console.log(interpret({name: 'app', fn: {name: 'fn', args: ['x'], body: {name: 'id', s: 'x'}}, args: [{name: 'num', n: '3'}]}));
