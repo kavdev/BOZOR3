@@ -1,0 +1,56 @@
+JSZOR? Language
+
+JSZOR ::= NUMBER
+       | true
+       | false
+       | ID
+       | {if JSZOR JSZOR JSZOR}
+       | {with {ID = JSZOR} ... JSOR}
+       | {fn {ID ...} JSZOR}
+       | {operator JSZOR JSZOR}
+       | {BOZOR3 JSZOR ...}
+
+operator ::= +
+         | -
+         | *
+         | /
+         | eq?
+         | <=
+
+
+
+Expressions:
+
+::num
+expr["name"] = "num"
+expr["n"] = ^/d+$
+
+::bool
+expr["name"] = "bool"
+expr["b"] = ^[true|false]$
+
+::lam
+expr["name"] = "lam"
+expr["params"] = [id]
+expr["body"] = expr
+
+::id
+expr["name"] = "id"
+expr["id"] = ^[a-zA-Z]+\w*$
+
+::if
+expr["name"] = "if"
+expr["cond"] = bool
+expr["then"] = expr
+expr["else"] = expr
+
+::binop
+expr["name"] = "binop"
+expr["op"] = operator
+expr["left"] = expr !-> num
+expr["right"] = expr !-> num
+
+::app
+expr["name"] = "app"
+expr["lam"] = expr !-> lam
+expr["args"] = [id]
