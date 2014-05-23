@@ -10,7 +10,7 @@ function requireType(value, type) {
     return value;
 }
 
-function interpret(expr) {
+function interpret(expr, env) {
     switch (expr['name']) {
 
     case 'num':
@@ -62,6 +62,11 @@ function interpret(expr) {
     case 'fn':
         break;
 
+    case 'id':
+
+        return env[expr['s']];
+        break;
+
     default:
         console.log("Confused.");
 
@@ -72,3 +77,4 @@ function interpret(expr) {
 
 console.log(interpret({name: 'num', n: '657'}));
 console.log(interpret({name: '+', l: {name: 'num', n: '123'}, r: {name: 'num', n: '456'}}));
+console.log(interpret({name: 'id', s: 'x'}, {x: 3}));
