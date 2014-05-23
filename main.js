@@ -1,5 +1,4 @@
 
-
 function throwParseError(expected, expr) {
     console.log("Parse error: Expected " + expected + " found " + expr);
     throw new Error();
@@ -53,6 +52,11 @@ function interpret(expr) {
         break;
 
     case 'if':
+
+        if (requireType((interpret(expr['if']), "boolean")))
+            interpret(expr['then']);
+        else
+            interpret(expr['else']);
         break;
 
     case 'fn':
