@@ -4,11 +4,11 @@ JSZOR ::= NUMBER
        | true
        | false
        | ID
-       | {if JSZOR JSZOR JSZOR}
-       | {with {ID = JSZOR} ... JSOR}
-       | {fn {ID ...} JSZOR}
-       | {operator JSZOR JSZOR}
-       | {BOZOR3 JSZOR, ...}
+       | ["if", JSZOR, JSZOR, JSZOR]
+       | ["with", [[ID, "=", JSZOR], ...], JSOR]
+       | ["fn". [ID, ...], JSZOR]
+       | ["operator", JSZOR, JSZOR]
+       | [JSZOR, JSZOR, ...]
 
 operator ::= +
          | -
