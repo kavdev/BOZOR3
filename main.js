@@ -26,9 +26,6 @@ function interpret(expr, env) {
             throwParseError('bool.b', expr);
         }
 
-    case 'with':
-        break;
-
     case'+':
         return requireType(interpret(expr['l']), "number") + requireType(interpret(expr['r']), "number");
 
@@ -42,7 +39,6 @@ function interpret(expr, env) {
         return requireType(interpret(expr['l']), "number") / requireType(interpret(expr['r']), "number");
 
     case 'eq?':
-
         left = interpret(expr['l']);
         right = interpret(expr['r']);
 
@@ -52,7 +48,6 @@ function interpret(expr, env) {
             return false;
 
     case 'if':
-
         if (requireType((interpret(expr['if']), "boolean")))
             interpret(expr['then']);
         else
