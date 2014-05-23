@@ -66,7 +66,6 @@ function interpret(expr, env) {
         break;
 
     case 'id':
-
         return env[expr['s']];
 
     default:
