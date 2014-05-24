@@ -27,7 +27,7 @@ expr["n"] = ^/d+$
 
 ::bool
 expr["name"] = "bool"
-expr["b"] = ^[true|false]$
+expr["b"] = ^true$|^false$
 
 ::lam
 expr["name"] = "lam"
