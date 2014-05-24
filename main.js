@@ -18,32 +18,40 @@ function interpret(expr, env) {
             return false;
         }
 
-    case'+':
-        return requireType(interpret(expr['left'], env), "number") + requireType(interpret(expr['right'], env), "number");
-
-    case'-':
-        return requireType(interpret(expr['left'], env), "number") - requireType(interpret(expr['right'], env), "number");
-
-    case'*':
-        return requireType(interpret(expr['left'], env), "number") * requireType(interpret(expr['right'], env), "number");
-
-    case'/':
-        return requireType(interpret(expr['left'], env), "number") / requireType(interpret(expr['right'], env), "number");
-
-    case 'eq?':
+    case 'binop':
         left = interpret(expr['left'], env);
         right = interpret(expr['right'], env);
+        switch (expr['op'])
+        {
+        case'+':
+            return requireType(left, "number") + requireType(right, "number");
 
-        if (typeof left == typeof right)
-            return left == right;
-        else
-            return false;
+        case'-':
+            return requireType(left, "number") - requireType(right, "number");
 
-    case '<=':
-        return requireType(interpret(expr['left'], env), "number") <= requireType(interpret(expr['right'], env), "number");
+        case'*':
+            return requireType(left, "number") * requireType(right, "number");
+
+        case'/':
+            return requireType(left, "number") / requireType(right, "number");
+
+        case 'eq?':
+
+            if (typeof left == typeof right)
+                return left == right;
+            else
+                return false;
+
+        case '<=':
+            return requireType(left, "number") <= requireType(right, "number");
+
+        default:
+            console.log("Confused? " + expr['name']);
+            return;
+        }
 
     case 'if':
-        if (requireType((interpret(expr['if'], env), "boolean")))
+        if (requireType((interpret(expr['cond'], env), "boolean")))
             interpret(expr['then'], env);
         else
             interpret(expr['else'], env);
@@ -69,7 +77,6 @@ function interpret(expr, env) {
 
     default:
         console.log("Confused? " + expr['name']);
-
     }
 
     return 0;
@@ -81,10 +88,10 @@ test("numbers", function() {
 });
 
 test("binops", function() {
-    ok(579 === interpret({name: '+', left: {name: 'num', n: '123'}, right: {name: 'num', n: '456'}}));
-    ok( 28 === interpret({name: '*', left: {name: 'num', n: '4'}, right: {name: 'num', n: '7'}}));
-    ok(  3 === interpret({name: '/', left: {name: 'num', n: '9'}, right: {name: 'num', n: '3'}}));
-    ok(100 === interpret({name: '-', left: {name: 'num', n: '123'}, right: {name: 'num', n: '23'}}));
+    ok(579 === interpret({name: 'binop', op: '+', left: {name: 'num', n: '123'}, right: {name: 'num', n: '456'}}));
+    ok( 28 === interpret({name: 'binop', op: '*', left: {name: 'num', n: '4'}, right: {name: 'num', n: '7'}}));
+    ok(  3 === interpret({name: 'binop', op: '/', left: {name: 'num', n: '9'}, right: {name: 'num', n: '3'}}));
+    ok(100 === interpret({name: 'binop', op: '-', left: {name: 'num', n: '123'}, right: {name: 'num', n: '23'}}));
 });
 
 test("identifiers", function() {
@@ -96,6 +103,6 @@ test("lambdas/applications", function() {
     ok(111 === interpret({name: 'app', lam: {name: 'lam', params: [], body: {name: 'num', n: '111'}}, args: []}));
     ok(3   === interpret({name: 'app', lam: {name: 'lam', params: ['x'], body: {name: 'id', id: 'x'}}, args: [{name: 'num', n: '3'}]}));
     ok(3   === interpret({name: 'app', lam: {name: 'lam', params: ['x', 'y'],
-        body: {name: '/', left: {name: 'id', id: 'x'}, right: {name: 'id', id: 'y'}}},
+        body: {name: 'binop', op: '/', left: {name: 'id', id: 'x'}, right: {name: 'id', id: 'y'}}},
         args: [{name: 'num', n: '21'}, {name: 'num', n: '7'}]}));
 });
